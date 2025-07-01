@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - 60) / 3;
 
-interface MovieItem {
+type MovieItem = {
   id: string;
   title: string;
   image: string;
@@ -125,7 +125,7 @@ const CollectionPage: React.FC = () => {
     </View>
   );
 
-  // Group movies into rows of 3
+
   const groupedMovies = movies.reduce<MovieItem[][]>((rows, movie, index) => {
     if (index % 3 === 0) {
       rows.push([movie]);
@@ -148,7 +148,6 @@ const CollectionPage: React.FC = () => {
           </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Private Toggle */}
         <View style={styles.privateContainer}>
           <Switch
             value={isPrivate}
@@ -160,7 +159,6 @@ const CollectionPage: React.FC = () => {
           <Text style={styles.privateLabel}>Private</Text>
         </View>
 
-        {/* Collection Name Input */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.textInput}
@@ -171,7 +169,6 @@ const CollectionPage: React.FC = () => {
           />
         </View>
 
-        {/* Description Input */}
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.textInput, styles.descriptionInput]}
@@ -185,7 +182,7 @@ const CollectionPage: React.FC = () => {
           />
         </View>
 
-        {/* Add from here section */}
+
         <View style={styles.addFromHereContainer}>
           <View style={styles.addFromHereHeader}>
             <Text style={styles.addFromHereTitle}>Add from here</Text>
@@ -194,7 +191,7 @@ const CollectionPage: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Movies Grid */}
+
           <FlatList
             data={groupedMovies}
             renderItem={renderRow}

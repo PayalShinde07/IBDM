@@ -2,42 +2,19 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-interface MovieProps {
-  title: string;
-  image: string;
-}
-
-const MovieCard: React.FC<MovieProps> = ({ title, image }) => (
-  <TouchableOpacity style={styles.movieCard}>
-    <Image source={{ uri: image }} style={styles.movieImage} />
-    <Text style={styles.movieTitle}>{title}</Text>
-  </TouchableOpacity>
-);
+import MovieCard from '@/Components/MovieCard';
+import { topMovies } from "@/utils/MovieArray";
 
 const Profile = () => {
   const router = useRouter();
 
-  const topMovies = [
-    { title: 'Hawkeye', 
-      image: 'https://cdn.marvel.com/content/1x/hawkeye_lob_crd_04.jpg'
-     },
-    { title: 'Thor: Love and Thunder', 
-      image: 'https://m.media-amazon.com/images/M/MV5BZjRiMDhiZjQtNjk5Yi00ZDcwLTkyYTEtMDc1NjdmNjFhNGIzXkEyXkFqcGc@._V1_.jpg' 
-    },
-    { title: 'The Lord of the Rings', 
-      image: 'https://tolkiengateway.net/w/images/thumb/5/5e/The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg/640px-The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg' 
-    },
-     { title: 'Avengers', 
-      image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg' 
-    },
-  ];
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
           <Image
-            source={{uri:'https://photosly.in/wp-content/uploads/2024/07/girl-dp-19.jpg'}}
+            source={{uri:'https://mrwallpaper.com/images/thumbnail/cute-brunette-profile-picture-rawnnhmrk168c9zk.webp'}}
             style={styles.profileImage}
           />
           <View>
@@ -144,24 +121,7 @@ const styles = StyleSheet.create({
   },
 moviesScroll: {
     paddingLeft: 16,
-    backgroundColor: '#F5F6FA',
-  },
-  movieCard: {
-    marginRight: 12,
-    width: 120,
-    backgroundColor: '#F5F6FA',
-  },
-  movieImage: {
-    width: 120,
-    height: 180,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  movieTitle: {
-    fontSize: 12,
-    color: '#000000',
-    textAlign: 'center',
-    lineHeight: 16,
+    backgroundColor: '#FFFFFF',
   },
   linkRow: {
     flexDirection: "row",

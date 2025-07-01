@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import {View,Text,ScrollView,TouchableOpacity,SafeAreaView,StyleSheet,StatusBar,Image,} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import {  reviews1} from '@/Components/Array';
 
-interface ReviewItem {
+type ReviewItem1 ={
   id: string;
   userName: string;
   userImage: string;
@@ -14,51 +15,6 @@ interface ReviewItem {
 const RatingPage: React.FC = () => {
     const  router = useRouter();
   const [userRating, setUserRating] = useState(0);
-
-  const reviews: ReviewItem[] = [
-    {
-      id: '1',
-      userName: 'Jane Alexandre',
-      userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_HFQbK0SjP6lVSn7FUknx5MVcXFb5GOW0sA&s',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters..',
-      rating: 'Promising',
-    },
-    {
-      id: '2',
-      userName: 'Jane Alexandre',
-      userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_HFQbK0SjP6lVSn7FUknx5MVcXFb5GOW0sA&s',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters..',
-      rating: 'Promising',
-    },
-    {
-      id: '3',
-      userName: 'Jane Alexandre',
-      userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_HFQbK0SjP6lVSn7FUknx5MVcXFb5GOW0sA&s',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters..',
-      rating: 'Promising',
-    },
-    {
-      id: '4',
-      userName: 'Jane Alexandre',
-      userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_HFQbK0SjP6lVSn7FUknx5MVcXFb5GOW0sA&s',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters..',
-      rating: 'Promising',
-    },
-    {
-      id: '5',
-      userName: 'Jane Alexandre',
-      userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_HFQbK0SjP6lVSn7FUknx5MVcXFb5GOW0sA&s',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters..',
-      rating: 'Promising',
-    },
-    {
-      id: '6',
-      userName: 'Jane Alexandre',
-      userImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_HFQbK0SjP6lVSn7FUknx5MVcXFb5GOW0sA&s',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters..',
-      rating: 'Promising',
-    },
-  ];
 
   const renderStars = (rating: number, size: number = 16, interactive: boolean = false) => {
     const stars = [];
@@ -93,7 +49,7 @@ const RatingPage: React.FC = () => {
     </View>
   );
 
-  const renderReview = (review: ReviewItem) => (
+  const renderReview = (review: ReviewItem1) => (
     <View key={review.id} style={styles.reviewCard}>
       <View style={styles.reviewHeader}>
         <Image source={{ uri: review.userImage }} style={styles.reviewUserImage} />
@@ -119,10 +75,10 @@ const RatingPage: React.FC = () => {
       </View>
 
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        {/* Rating Section */}
+
         <View style={styles.ratingSection}>
           <View style={styles.mainRatingContainer}>
-            {/* Left side - Rating info */}
+
             <View style={styles.leftRatingInfo}>
               <Text style={styles.ratingLabel}>Rating</Text>
               <View style={styles.ratingWithStar}>
@@ -132,10 +88,9 @@ const RatingPage: React.FC = () => {
                 <Text style={styles.ratingValue}>7.0 (IMDb)</Text>
               </View>
             </View>
-            
-            {/* Right side - Rating Bars */}
+
             <View style={styles.rightRatingBars}>
-              {renderRatingBar(5, 45)}
+              {renderRatingBar(5, 50)}
               {renderRatingBar(4, 25)}
               {renderRatingBar(3, 15)}
               {renderRatingBar(2, 10)}
@@ -157,7 +112,7 @@ const RatingPage: React.FC = () => {
         </View>
 
         <View style={styles.reviewsContainer}>
-          {reviews.map(renderReview)}
+          {reviews1.map(renderReview)}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -217,7 +172,7 @@ const styles = StyleSheet.create({
   ratingWithStar: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 17,
   },
   ratingValue: {
     fontSize: 14,
@@ -226,6 +181,7 @@ const styles = StyleSheet.create({
   },
   rightRatingBars: {
     flex: 1,
+    marginRight: 20,
   },
   ratingBarContainer: {
     flexDirection: 'row',

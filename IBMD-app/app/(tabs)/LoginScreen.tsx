@@ -14,11 +14,10 @@ const LoginScreen: React.FC= () => {
   const handleLogin = (): void => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
-      router.push('/(tabs)/Home');
       return;
     }
-
     Alert.alert('Login', `Attempting to login with email: ${email}`);
+    router.push('/');
   };
 
   const handleForgotPassword = (): void => {

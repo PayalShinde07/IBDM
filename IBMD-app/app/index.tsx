@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 export default function Index() {
   return (
     <Tab.Navigator 
-      initialRouteName='Discover'
+      initialRouteName='Home'
       screenOptions={({ route }) => ({
         tabBarStyle: {
           backgroundColor: '#000000',
@@ -69,14 +69,12 @@ export default function Index() {
         options={{ 
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => (
-            <View style={[styles.tabItem, focused && styles.activeTab]}>
-              <View style={focused ? styles.activeIconContainer : null}>
+            <View style={styles.tabItem}>
                 <MaterialCommunityIcons
-                  name="compass"
+                  name={focused ? "animation-play" : "animation-play-outline"}
                   size={28}
                   color={color}
                 />
-              </View>
               <Text style={[styles.tabLabel, { color }]}>Discover</Text>
             </View>
           ),

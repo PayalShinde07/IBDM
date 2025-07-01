@@ -2,70 +2,17 @@ import React from 'react';
 import {View,Text,ScrollView,Image,TouchableOpacity,SafeAreaView,StyleSheet,StatusBar,FlatList,} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-interface MovieItem {
+import {relatedMovies, reviews} from '@/Components/Array';
+ type MovieItem1 = {
   id: string;
   title: string;
   image: string;
 }
 
-interface ReviewItem {
-  id: string;
-  userName: string;
-  userImage: string;
-  review: string;
-  rating: string;
-}
-
 const MovieDetail: React.FC = () => {
     const router = useRouter();
-  const relatedMovies: MovieItem[] = [
-    {
-      id: '1',
-      title: 'Avengers', 
-      image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg' ,
-    },
-    {
-      id: '2',
-     title: 'Maleficent', 
-      image: 'https://photogallery.indiatimes.com/movies/international/maleficent/photo/35618380/Poster-of-Hollywood-dark-fantasy-adventure-film-Maleficent-starring-Angelina-Jolie-.jpg' ,
-    },
-    {
-      id: '3',
-      title: 'Jumanji', 
-      image: 'https://qqcdnpictest.mxplay.com/pic/bce7ae02445dad432bdab581e180ceef/en/2x3/312x468/d5f863cd13cc307123989701f8b72fdf_1280x1920.webp' ,
-    },
-    {
-      id: '4',
-     title: 'Hawkeye', 
-      image: 'https://cdn.marvel.com/content/1x/hawkeye_lob_crd_04.jpg' ,
-    },
-  ];
-
-  const reviews: ReviewItem[] = [
-    {
-      id: '1',
-      userName: 'Jane Alexandre',
-      userImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters.',
-      rating: 'Promising',
-    },
-    {
-      id: '2',
-      userName: 'Jane Alex',
-      userImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters.',
-      rating: 'Promising',
-    },
-    {
-      id: '3',
-      userName: 'Jane Alexandre',
-      userImage: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face',
-      review: 'Carrying the nostalgia of Game of thrones into this and comparing everything with the original...I would say this looks pretty awesome and you get the feel of watching original game of thrones... Its the same but different characters.',
-      rating: 'Promising',
-    },
-  ];
-
-  const renderRelatedMovie = ({ item }: { item: MovieItem }) => (
+  
+  const renderRelatedMovie = ({ item }: { item: MovieItem1 }) => (
     <TouchableOpacity style={styles.relatedMovieItem}>
       <Image source={{ uri: item.image }} style={styles.relatedMovieImage} />
       <Text style={styles.relatedMovieTitle}>{item.title}</Text>
@@ -78,7 +25,6 @@ const MovieDetail: React.FC = () => {
       <StatusBar barStyle="light-content" backgroundColor="#000" />
       
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        {/* Featured Movie Section */}
         <View style={styles.featuredSection}>
           <Image
             source={{ 
@@ -107,7 +53,6 @@ const MovieDetail: React.FC = () => {
         </View>
 
         <View style={styles.contentContainer}>
-          {/* Tab Navigation */}
           <View style={styles.tabContainer}>
             <TouchableOpacity style={styles.tabButton} onPress={() => router.push('/(tabs)/RatingPage')}>
               <Text style={styles.tabText}>Rating</Text>
@@ -123,7 +68,7 @@ const MovieDetail: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Movie Details */}
+
           <View style={styles.detailsSection}>
             <View style={styles.detailItem}>
               <Text style={styles.detailLabel}>Release date</Text>
@@ -144,7 +89,7 @@ const MovieDetail: React.FC = () => {
             </View>
           </View>
 
-          {/* Action Buttons */}
+
           <View style={styles.actionButtonsContainer}>
             <TouchableOpacity style={styles.primaryButton} onPress={() => router.push('/(tabs)/WatchList')}>
               <MaterialCommunityIcons name="plus" size={20} color="#000"/>
@@ -156,7 +101,7 @@ const MovieDetail: React.FC = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Screenshots */}
+
           <View style={styles.screenshotsSection}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <Image 
@@ -174,7 +119,7 @@ const MovieDetail: React.FC = () => {
             </ScrollView>
           </View>
 
-          {/* Rating & Review Section */}
+
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Rating & Review</Text>
@@ -201,7 +146,6 @@ const MovieDetail: React.FC = () => {
             </ScrollView>
           </View>
 
-          {/* You might also like Section */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle1}>You might also like</Text>

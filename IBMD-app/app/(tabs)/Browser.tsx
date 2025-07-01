@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {View,Text,TextInput,ScrollView,TouchableOpacity,Image,StyleSheet,StatusBar,SafeAreaView,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { moviesShows } from '@/Components/Array';
 
-interface MovieShow {
+type MovieShow = {
   id: string;
   title: string;
   year?: string;
@@ -12,38 +13,6 @@ interface MovieShow {
 const Browser: React.FC = () => {
   const [activeTab, setActiveTab] = useState('All Shows');
   const [searchText, setSearchText] = useState('');
-  const moviesShows: MovieShow[] = [
-    {
-      id: '1',
-      title: 'Hawkeye', 
-      image: 'https://cdn.marvel.com/content/1x/hawkeye_lob_crd_04.jpg',
-    },
-    {
-      id: '2',
-     title: 'Thor: Love and Thunder', 
-      image: 'https://m.media-amazon.com/images/M/MV5BZjRiMDhiZjQtNjk5Yi00ZDcwLTkyYTEtMDc1NjdmNjFhNGIzXkEyXkFqcGc@._V1_.jpg'
-    },
-    {
-      id: '3',
-      title: 'The Lord of the Rings', 
-      image: 'https://tolkiengateway.net/w/images/thumb/5/5e/The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg/640px-The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg'
-    },
-    {
-      id: '4',
-      title: 'Avengers', 
-      image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg' 
-    },
-    {
-      id: '5',
-      title: "The Boys",
-      image: 'https://cdnb.artstation.com/p/assets/images/images/031/128/313/large/mayank-kumarr-2.jpg?1602685224',
-    },
-    {
-      id: '6',
-      title: 'The Shark Tank',
-      image: 'https://qph.cf2.quoracdn.net/main-qimg-0cbe18cdabc9cab371089a18442a38b2-lq',
-    },
-  ];
 
   const renderMovieItem = (item: MovieShow) => (
     <TouchableOpacity key={item.id} style={styles.movieItem}>
@@ -95,7 +64,7 @@ const Browser: React.FC = () => {
                 </View>
       </View>
 
-      {/* Movies/Shows Grid */}
+  
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.moviesGrid}>
           {moviesShows.map((item) => renderMovieItem(item))}
@@ -184,11 +153,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ffef85',
-    backgroundColor: '#edf0f2',
+    backgroundColor: '#fdf5e2',
   },
   tabText: {
     fontSize: 14,
-    color: '#ffe016',
+    color: '#f1ad0e',
     fontWeight: '400',
   },
   tabsContainer: {
@@ -202,13 +171,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 8,
     borderRadius: 6,
-    backgroundColor: '#fff8c8',
+    backgroundColor: '#fdf5e2',
   },
   activeTab: {
-    backgroundColor: '#FFA500',
+    backgroundColor: '#F5C418',
   },
   activeTabText: {
-    color: '#FFFFFF',
+    fontSize: 14,
+    color: '#FFFFFFz',
+    fontWeight: '400',
   },
   content: {
     flex: 1,

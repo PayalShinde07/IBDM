@@ -2,56 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList,SafeAreaView, StatusBar } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import {collections, suggestions} from '@/utils/MovieArray';
 
-const collections = [
-  { 
-    id: '1', 
-    title: 'All', 
-    count: 15, 
-    image: 'https://images.unsplash.com/photo-1497864979123-ef3595423b92?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Ymx1ciUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D',
-},
-  { 
-    id: '2', 
-    title: 'Action', 
-    count: 15, 
-    image: 'https://www.shutterstock.com/image-photo/movie-theater-entrance-interior-blur-600nw-1819363976.jpg',
-},
-  { 
-    id: '3', 
-    title: 'Tv series', 
-    count: 15, 
-    image: 'https://images.pond5.com/hd-tv-studio-blurred-background-022288315_prevstill.jpeg',
-},
-  { 
-    id: '4', 
-    title: 'Horror Movies', 
-    count: 15, 
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZcRKGf379YN9t97k3oxiD-WJfliQDOSaqRQ&s', 
-},
-];
-
-const suggestions = [
-  {
-    id: '1',
-    title: 'Avengers', 
-    image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg',
-  },
-  {
-    id: '2',
-    title: 'Maleficent', 
-    image: 'https://photogallery.indiatimes.com/movies/international/maleficent/photo/35618380/Poster-of-Hollywood-dark-fantasy-adventure-film-Maleficent-starring-Angelina-Jolie-.jpg',
-  },
-  {
-    id: '3',
-    title: 'Jumanji', 
-    image: 'https://qqcdnpictest.mxplay.com/pic/bce7ae02445dad432bdab581e180ceef/en/2x3/312x468/d5f863cd13cc307123989701f8b72fdf_1280x1920.webp',
-  },
-   { 
-    id: '4',
-    title: 'Hawkeye', 
-    image: 'https://cdn.marvel.com/content/1x/hawkeye_lob_crd_04.jpg'
-},
-];
 
 export default function Watchlist() {
   const router= useRouter();

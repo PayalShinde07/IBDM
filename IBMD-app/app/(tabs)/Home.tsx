@@ -1,68 +1,39 @@
-import React, { JSX } from 'react';
-import {View,Text,SafeAreaView,StatusBar,StyleSheet,ScrollView,Image,TouchableOpacity, FlatList,} from 'react-native';
+import React, { JSX, useEffect } from 'react';
+import {View,Text,SafeAreaView,StatusBar,StyleSheet,ScrollView,Image,TouchableOpacity, FlatList,Dimensions} from 'react-native';
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useRouter } from 'expo-router';
+import Carousel from 'react-native-reanimated-carousel';
+//import MovieCard from '@/Components/MovieCard';
+import {featuredMovies,} from '@/utils/MovieArray';
 
-
-interface MovieProps {
-  title: string;
-  image: string;
-}
-
-const MovieCard: React.FC<MovieProps> = ({ title, image }) => (
-  <TouchableOpacity style={styles.movieCard}>
-    <Image source={{ uri: image }} style={styles.movieImage} />
-    <Text style={styles.movieTitle}>{title}</Text>
-  </TouchableOpacity>
-);
 
 export default function Home(): JSX.Element {
 
   const router = useRouter();
-  const topMovies = [
-    { title: 'Hawkeye', 
-      image: 'https://cdn.marvel.com/content/1x/hawkeye_lob_crd_04.jpg'
-     },
-    { title: 'Thor: Love and Thunder', 
-      image: 'https://m.media-amazon.com/images/M/MV5BZjRiMDhiZjQtNjk5Yi00ZDcwLTkyYTEtMDc1NjdmNjFhNGIzXkEyXkFqcGc@._V1_.jpg' 
-    },
-    { title: 'The Lord of the Rings', 
-      image: 'https://tolkiengateway.net/w/images/thumb/5/5e/The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg/640px-The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg' 
-    },
-     { title: 'Avengers', 
-      image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg' 
-    },
-  ];
-
-  const upcomingMovies = [
-    { title: 'Chhaava', 
-      image: 'https://stat4.bollywoodhungama.in/wp-content/uploads/2023/10/Chhaava.jpg' 
-    },
-    { title: 'Inception', 
-      image: 'https://c8.alamy.com/comp/2JH2PW0/movie-poster-inception-2010-2JH2PW0.jpg' 
-    },
-    { title: 'Avatar', 
-      image: 'https://m.media-amazon.com/images/M/MV5BNmQxNjZlZTctMWJiMC00NGMxLWJjNTctNTFiNjA1Njk3ZDQ5XkEyXkFqcGc@._V1_.jpg' 
-    },
-    { title: 'Maleficent', 
-      image: 'https://photogallery.indiatimes.com/movies/international/maleficent/photo/35618380/Poster-of-Hollywood-dark-fantasy-adventure-film-Maleficent-starring-Angelina-Jolie-.jpg' 
-    },
-  ];
-
-  const recommendedMovies = [
-    { title: 'Avengers', 
-      image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg' 
-    },
-    { title: 'Maleficent', 
-      image: 'https://photogallery.indiatimes.com/movies/international/maleficent/photo/35618380/Poster-of-Hollywood-dark-fantasy-adventure-film-Maleficent-starring-Angelina-Jolie-.jpg' 
-    },
-    { title: 'Jumanji', 
-      image: 'https://qqcdnpictest.mxplay.com/pic/bce7ae02445dad432bdab581e180ceef/en/2x3/312x468/d5f863cd13cc307123989701f8b72fdf_1280x1920.webp' 
-    },
-    { title: 'Hawkeye', 
-      image: 'https://cdn.marvel.com/content/1x/hawkeye_lob_crd_04.jpg'
-     },
-  ];
+  const [movies, setMovies] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  useEffect(() => {
+    fetch("https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1", {
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZGJlZjk2MGM0ZmZhNDU4MTI0N2JiMzM5OGY1NGM1ZSIsIm5iZiI6MTc1MTM1OTQxNy44ODMwMDAxLCJzdWIiOiI2ODYzOWZiOWQ2ZTg3MGNkM2RjY2Q5NzciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.jPbmLAK5whMqCoLU9kf2w4VUnGJEs6i8hVmHncGf2rc",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.results) {
+          setMovies(data.results);
+          setLoading(false);
+        } else {
+          console.log("data not found");
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <View style={styles.outerContainer}>
@@ -78,22 +49,33 @@ export default function Home(): JSX.Element {
 
 
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-
-          <View style={styles.featuredSection}>
-            <Image
-              source={{ uri: 'https://m.media-amazon.com/images/S/pv-target-images/cd1315256292e7814afe0b8a5e25e6d2c752aea049deb5df61b6d3ebbbff777d.jpg' }}
-              style={styles.featuredImage}
+          <View style={styles.carouselContainer}>
+            <Carousel
+              loop
+              autoPlay
+              autoPlayInterval={3000}
+              width={Dimensions.get('window').width}
+              height={300}
+              data={featuredMovies}
+              scrollAnimationDuration={1000}
+              renderItem={({ item }) => (
+                <View style={styles.featuredSection}>
+                  <Image source={{ uri: item.image }} style={styles.featuredImage} />
+                  <View style={styles.featuredOverlay}>
+                    <Text style={styles.featuredTitle}>{item.title}</Text>
+                    <Text style={styles.featuredDescription}>{item.description}</Text>
+                    <TouchableOpacity
+                      style={styles.seeMoreButton}
+                      onPress={() => router.push('/(tabs)/MovieDetail')}
+                    >
+                      <Text style={styles.seeMoreText}>See More</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
             />
-            <View style={styles.featuredOverlay}>
-              <Text style={styles.featuredTitle}>House of the Dragon</Text>
-              <Text style={styles.featuredDescription}>
-                An internal succession war within House Targaryen at the height of its power, 172 years before the birth of Daenerys Targaryen.
-              </Text>
-              <TouchableOpacity style={styles.seeMoreButton} onPress={() => router.push('/(tabs)/MovieDetail')}>
-                <Text style={styles.seeMoreText}>See More</Text>
-              </TouchableOpacity>
-            </View>
           </View>
+
 
           <View style={styles.section}>
             <View style={styles.dailyPick}>
@@ -126,15 +108,18 @@ export default function Home(): JSX.Element {
             </View>
             <View style={styles.moviesScroll}>
              <FlatList
-               data={topMovies}
+               data={movies}
                keyExtractor={(item, index) => index.toString()}
                horizontal
-              showsHorizontalScrollIndicator={false}
-               renderItem={({ item }) => (
-                 <MovieCard title={item.title} image={item.image} />
+               showsHorizontalScrollIndicator={false}
+               renderItem={({ item }: { item: { poster_path: string; title: string } }) => (
+                <View style={styles.movieCard}>
+                 <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} style={styles.movieImage} />
+                 <Text numberOfLines={1} style={styles.movieTitle}>{item.title}</Text>
+                </View>
                )}
              />
-    </View>
+            </View>
           </View>
 
           <View style={styles.section}>
@@ -144,19 +129,21 @@ export default function Home(): JSX.Element {
                 <Text style={styles.seeMoreLink}>See More</Text>
               </TouchableOpacity>
             </View>
-           <View style={styles.moviesScroll}>
-            <FlatList
-              data={upcomingMovies}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <MovieCard title={item.title} image={item.image} />
-              )}
-            />
-    </View>
+            <View style={styles.moviesScroll}>
+              <FlatList
+               data={movies}
+               keyExtractor={(item, index) => index.toString()}
+               horizontal
+               showsHorizontalScrollIndicator={false}
+               renderItem={({ item }: { item: { poster_path: string; title: string } }) => (
+                <View style={styles.movieCard}>
+                 <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} style={styles.movieImage} />
+                 <Text numberOfLines={1} style={styles.movieTitle}>{item.title}</Text>
+                </View>
+               )}
+             />
+            </View>
           </View>
-
 
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
@@ -167,15 +154,18 @@ export default function Home(): JSX.Element {
             </View>
             <View style={styles.moviesScroll}>
              <FlatList
-               data={recommendedMovies}
+               data={movies}
                keyExtractor={(item, index) => index.toString()}
                horizontal
                showsHorizontalScrollIndicator={false}
-               renderItem={({ item }) => (
-                 <MovieCard title={item.title} image={item.image} />
+               renderItem={({ item }: { item: { poster_path: string; title: string } }) => (
+                <View style={styles.movieCard}>
+                 <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} style={styles.movieImage} />
+                 <Text numberOfLines={1} style={styles.movieTitle}>{item.title}</Text>
+                </View>
                )}
              />
-    </View>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -212,6 +202,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF', 
   },
+    carouselContainer: {
+  height: 300,
+  backgroundColor: '#FFFFFF',
+},
+
   featuredSection: {
     position: 'relative',
     height: 300,
