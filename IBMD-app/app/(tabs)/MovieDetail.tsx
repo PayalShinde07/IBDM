@@ -1,29 +1,22 @@
 import React from 'react';
-import {View,Text,ScrollView,Image,TouchableOpacity,SafeAreaView,StyleSheet,StatusBar,FlatList,} from 'react-native';
+import {View,Text,ScrollView,Image,TouchableOpacity,SafeAreaView,StyleSheet,StatusBar,} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import {relatedMovies, reviews} from '@/Components/Array';
- type MovieItem1 = {
-  id: string;
-  title: string;
-  image: string;
-}
+import { reviews} from '@/Components/Array';
+import TVShows from '@/Components/TVShows';
+
 
 const MovieDetail: React.FC = () => {
     const router = useRouter();
   
-  const renderRelatedMovie = ({ item }: { item: MovieItem1 }) => (
-    <TouchableOpacity style={styles.relatedMovieItem}>
-      <Image source={{ uri: item.image }} style={styles.relatedMovieImage} />
-      <Text style={styles.relatedMovieTitle}>{item.title}</Text>
-    </TouchableOpacity>
-  );
 
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000" />
-      
+       <TouchableOpacity style={styles.backButton} onPress={() => router.push('/')}>
+                  <MaterialCommunityIcons name="chevron-left" size={34} color="#fff" />
+       </TouchableOpacity>
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={styles.featuredSection}>
           <Image
@@ -153,15 +146,7 @@ const MovieDetail: React.FC = () => {
                 <Text style={styles.seeMoreText}>See More</Text>
               </TouchableOpacity>
             </View>
-            
-            <FlatList
-              data={relatedMovies}
-              renderItem={renderRelatedMovie}
-              keyExtractor={(item) => item.id}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.horizontalList}
-            />
+           <TVShows />
           </View>
         </View>
       </ScrollView>
@@ -177,6 +162,10 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  backButton: {
+    marginRight: 20,
+    marginTop:30,
   },
   featuredSection: {
     position: 'relative',
@@ -320,6 +309,7 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 35,
+   
   },
   sectionHeader: {
     flexDirection: 'row',

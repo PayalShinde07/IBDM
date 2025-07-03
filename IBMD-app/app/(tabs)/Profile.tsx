@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import MovieCard from '@/Components/MovieCard';
-import { topMovies } from "@/utils/MovieArray";
+import TopMovies from "@/Components/TopMovies";
 
 const Profile = () => {
   const router = useRouter();
@@ -34,16 +33,8 @@ const Profile = () => {
         </TouchableOpacity>
 
            <View style={styles.moviesScroll}>
-                       <FlatList
-                         data={topMovies}
-                         keyExtractor={(item, index) => index.toString()}
-                         horizontal
-                        showsHorizontalScrollIndicator={false}
-                         renderItem={({ item }) => (
-                           <MovieCard title={item.title} image={item.image} />
-                         )}
-                       />
-              </View>
+                     <TopMovies/>
+            </View>
 
 
         <TouchableOpacity style={styles.linkRow}>

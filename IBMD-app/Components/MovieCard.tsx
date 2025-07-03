@@ -1,10 +1,11 @@
 import { TouchableOpacity,Image,Text,StyleSheet } from "react-native";
 interface MovieProps {
+  id?:number;
   title: string;
   image: string;
 }
 
-const MovieCard: React.FC<MovieProps> = ({ title, image }) => (
+const MovieCard: React.FC<MovieProps> = ({ title, image,id }:MovieProps) => (
   <TouchableOpacity style={styles.movieCard}>
     <Image source={{ uri: image }} style={styles.movieImage} />
     <Text style={styles.movieTitle}>{title}</Text>

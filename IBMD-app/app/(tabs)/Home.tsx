@@ -1,39 +1,16 @@
-import React, { JSX, useEffect } from 'react';
-import {View,Text,SafeAreaView,StatusBar,StyleSheet,ScrollView,Image,TouchableOpacity, FlatList,Dimensions} from 'react-native';
+import React, { JSX } from 'react';
+import {View,Text,SafeAreaView,StatusBar,StyleSheet,ScrollView,Image,TouchableOpacity} from 'react-native';
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useRouter } from 'expo-router';
-import Carousel from 'react-native-reanimated-carousel';
-//import MovieCard from '@/Components/MovieCard';
-import {featuredMovies,} from '@/utils/MovieArray';
+import Upcoming from '@/Components/Upcoming';
+import TopMovies from '@/Components/TopMovies';
+import PopularMovies from '@/Components/PopularMovies';
+import HeaderMovies from '@/Components/HeaderMovies';
 
 
 export default function Home(): JSX.Element {
 
   const router = useRouter();
-  const [movies, setMovies] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  useEffect(() => {
-    fetch("https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1", {
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZGJlZjk2MGM0ZmZhNDU4MTI0N2JiMzM5OGY1NGM1ZSIsIm5iZiI6MTc1MTM1OTQxNy44ODMwMDAxLCJzdWIiOiI2ODYzOWZiOWQ2ZTg3MGNkM2RjY2Q5NzciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.jPbmLAK5whMqCoLU9kf2w4VUnGJEs6i8hVmHncGf2rc",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.results) {
-          setMovies(data.results);
-          setLoading(false);
-        } else {
-          console.log("data not found");
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        setLoading(false);
-      });
-  }, []);
 
   return (
     <View style={styles.outerContainer}>
@@ -49,33 +26,7 @@ export default function Home(): JSX.Element {
 
 
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-          <View style={styles.carouselContainer}>
-            <Carousel
-              loop
-              autoPlay
-              autoPlayInterval={3000}
-              width={Dimensions.get('window').width}
-              height={300}
-              data={featuredMovies}
-              scrollAnimationDuration={1000}
-              renderItem={({ item }) => (
-                <View style={styles.featuredSection}>
-                  <Image source={{ uri: item.image }} style={styles.featuredImage} />
-                  <View style={styles.featuredOverlay}>
-                    <Text style={styles.featuredTitle}>{item.title}</Text>
-                    <Text style={styles.featuredDescription}>{item.description}</Text>
-                    <TouchableOpacity
-                      style={styles.seeMoreButton}
-                      onPress={() => router.push('/(tabs)/MovieDetail')}
-                    >
-                      <Text style={styles.seeMoreText}>See More</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
-            />
-          </View>
-
+          <HeaderMovies/>
 
           <View style={styles.section}>
             <View style={styles.dailyPick}>
@@ -106,20 +57,9 @@ export default function Home(): JSX.Element {
                 <Text style={styles.seeMoreLink}>See More</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.moviesScroll}>
-             <FlatList
-               data={movies}
-               keyExtractor={(item, index) => index.toString()}
-               horizontal
-               showsHorizontalScrollIndicator={false}
-               renderItem={({ item }: { item: { poster_path: string; title: string } }) => (
-                <View style={styles.movieCard}>
-                 <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} style={styles.movieImage} />
-                 <Text numberOfLines={1} style={styles.movieTitle}>{item.title}</Text>
-                </View>
-               )}
-             />
-            </View>
+            
+           <TopMovies/>
+    
           </View>
 
           <View style={styles.section}>
@@ -129,20 +69,7 @@ export default function Home(): JSX.Element {
                 <Text style={styles.seeMoreLink}>See More</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.moviesScroll}>
-              <FlatList
-               data={movies}
-               keyExtractor={(item, index) => index.toString()}
-               horizontal
-               showsHorizontalScrollIndicator={false}
-               renderItem={({ item }: { item: { poster_path: string; title: string } }) => (
-                <View style={styles.movieCard}>
-                 <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} style={styles.movieImage} />
-                 <Text numberOfLines={1} style={styles.movieTitle}>{item.title}</Text>
-                </View>
-               )}
-             />
-            </View>
+            <Upcoming/>
           </View>
 
           <View style={styles.section}>
@@ -152,20 +79,7 @@ export default function Home(): JSX.Element {
                 <Text style={styles.seeMoreLink}>See More</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.moviesScroll}>
-             <FlatList
-               data={movies}
-               keyExtractor={(item, index) => index.toString()}
-               horizontal
-               showsHorizontalScrollIndicator={false}
-               renderItem={({ item }: { item: { poster_path: string; title: string } }) => (
-                <View style={styles.movieCard}>
-                 <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} style={styles.movieImage} />
-                 <Text numberOfLines={1} style={styles.movieTitle}>{item.title}</Text>
-                </View>
-               )}
-             />
-            </View>
+           <PopularMovies/>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -202,54 +116,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF', 
   },
-    carouselContainer: {
-  height: 300,
-  backgroundColor: '#FFFFFF',
-},
-
-  featuredSection: {
-    position: 'relative',
-    height: 300,
-    backgroundColor: '#FFFFFF',
-  },
-  featuredImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  featuredOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    padding: 16,
-  },
-  featuredTitle: {
-    color: '#F5C842',
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 4,
-    zIndex: 2,
-  },
-  featuredDescription: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    lineHeight: 16,
-    marginBottom: 12,
-    zIndex: 2,
-  },
-  seeMoreButton: {
-    backgroundColor: '#F5C418',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignSelf: 'flex-start',
-  },
-  seeMoreText: {
-    color: '#000000',
-    fontSize: 14,
-  },
+ 
   section: {
     backgroundColor: '#FFFFFF',
     paddingVertical: 16,
@@ -325,25 +192,5 @@ const styles = StyleSheet.create({
     color: '#F5C418',
     fontWeight: '600',
   },
-  moviesScroll: {
-    paddingLeft: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  movieCard: {
-    marginRight: 12,
-    width: 120,
-    backgroundColor: '#FFFFFF',
-  },
-  movieImage: {
-    width: 120,
-    height: 180,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  movieTitle: {
-    fontSize: 12,
-    color: '#000000',
-    textAlign: 'center',
-    lineHeight: 16,
-  },
+ 
 });

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList,SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image,SafeAreaView, StatusBar } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import {collections, suggestions} from '@/utils/MovieArray';
+import collections   from '@/utils/MovieArray';
+import TVShows from '@/Components/TVShows';
 
 
 export default function Watchlist() {
@@ -41,20 +42,7 @@ export default function Watchlist() {
           <Text style={styles.seeMore}>See More</Text>
         </TouchableOpacity>
       </View>
-
-      <FlatList
-        data={suggestions}
-        keyExtractor={(item) => item.id}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 10, paddingBottom: 20 }}
-        renderItem={({ item }) => (
-          <View style={styles.suggestionCard}>
-            <Image source={{ uri: item.image }} style={styles.suggestionImage} />
-            <Text style={styles.suggestionText}>{item.title}</Text>
-          </View>
-        )}
-      />
+      <TVShows/>
   </SafeAreaView>
  </View>
   );
@@ -153,18 +141,5 @@ const styles = StyleSheet.create({
     color: '#F5A623',
      paddingBottom: 10,
     },
-  suggestionCard: { 
-    width: 120, 
-    marginRight: 10,
-   },
-  suggestionImage: {
-     width: '100%',
-      height: 180, 
-      borderRadius: 8 ,
-    },
-  suggestionText: {
-     marginTop: 5, 
-     fontSize: 14,
-      textAlign: 'center',
-     },
+  
 });

@@ -28,7 +28,7 @@ const RatingPage: React.FC = () => {
           <MaterialCommunityIcons
             name={i <= rating ? 'star' : 'star-outline'}
             size={20}
-            color={i <= rating ? '#FFD700' : '#DDD'}
+            color={i <= rating ? '#000000' : '#DDD'}
           />
         </TouchableOpacity>
       );

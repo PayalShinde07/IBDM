@@ -1,22 +1,3 @@
-export type FormData = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  rememberMe: boolean;
-}
-
-export type MovieShow = {
-  id: string;
-  title: string;
-  year?: string;
-  image: string;
-}
-export type CastMember = {
-  id: string;
-  name: string;
-  image: string;
-}
 
 export type MovieItem = {
   id: string;

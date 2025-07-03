@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {View,Text,StyleSheet,StatusBar,TouchableOpacity,ScrollView,TextInput,SafeAreaView,Alert,Dimensions,Switch,FlatList,Image,} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -7,6 +7,7 @@ const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - 60) / 3;
 
 type MovieItem = {
+  poster_path: any;
   id: string;
   title: string;
   image: string;
@@ -19,74 +20,43 @@ const CollectionPage: React.FC = () => {
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [collectionName, setCollectionName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [movies, setMovies] = useState<MovieItem[]>([
-    { 
-      id: '1',
-      title: 'Hawkeye', 
-      image: 'https://cdn.marvel.com/content/1x/hawkeye_lob_crd_04.jpg',
-      isSelected: false
-    },
-    { 
-      id: '2',
-      title: 'Thor: Love and Thunder', 
-      image: 'https://m.media-amazon.com/images/M/MV5BZjRiMDhiZjQtNjk5Yi00ZDcwLTkyYTEtMDc1NjdmNjFhNGIzXkEyXkFqcGc@._V1_.jpg',
-      isSelected: false
-    },
-    { 
-      id: '3',
-      title: 'The Lord of the Rings', 
-      image: 'https://tolkiengateway.net/w/images/thumb/5/5e/The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg/640px-The_Lord_of_the_Rings_-_The_Return_of_the_King_-_Ensemble_poster.jpg',
-      isSelected: false
-    },
-    { 
-      id:'4',  
-      title: 'Avengers', 
-      image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg',
-      isSelected: false
-    },
-    {
-      id: '5',
-      title: 'Chhaava', 
-      image: 'https://stat4.bollywoodhungama.in/wp-content/uploads/2023/10/Chhaava.jpg',
-      isSelected: false
-    },
-    {
-      id: '6',
-      title: 'Inception', 
-      image: 'https://c8.alamy.com/comp/2JH2PW0/movie-poster-inception-2010-2JH2PW0.jpg',
-      isSelected: false
-    },
-    {
-      id: '7',
-      title: 'Avatar', 
-      image: 'https://m.media-amazon.com/images/M/MV5BNmQxNjZlZTctMWJiMC00NGMxLWJjNTctNTFiNjA1Njk3ZDQ5XkEyXkFqcGc@._V1_.jpg',
-      isSelected: false
-    },
-    {
-      id: '8',
-      title: 'Maleficent', 
-      image: 'https://photogallery.indiatimes.com/movies/international/maleficent/photo/35618380/Poster-of-Hollywood-dark-fantasy-adventure-film-Maleficent-starring-Angelina-Jolie-.jpg',
-      isSelected: false
-    },
-    {
-      id: '9',
-      title: 'Avengers Endgame', 
-      image: 'https://images1.wionews.com/images/ZB-EN/900x1600/2023/5/5/1683302779303_AvengersAgeofUltron.jpg',
-      isSelected: false
-    },
-  ]);
+  const [movies, setMovies] = React.useState<MovieItem[]>([]); 
+  const [, setLoading] = React.useState<boolean>(true); 
+  
+  useEffect(() => {
+    fetch("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1", {
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZGJlZjk2MGM0ZmZhNDU4MTI0N2JiMzM5OGY1NGM1ZSIsIm5iZiI6MTc1MTM1OTQxNy44ODMwMDAxLCJzdWIiOiI2ODYzOWZiOWQ2ZTg3MGNkM2RjY2Q5NzciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.jPbmLAK5whMqCoLU9kf2w4VUnGJEs6i8hVmHncGf2rc",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.results) {
+          setMovies(data.results);
+          setLoading(false);
+        } else {
+          console.log("data not found");
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        setLoading(false);
+      });
+  }, []);
+  
   const handleSeeMore = (): void => {
     Alert.alert('See More', 'See more movies to add');
   };
 
   const toggleMovieSelection = (movieId: string): void => {
-    setMovies(prevMovies =>
-      prevMovies.map(movie =>
-        movie.id === movieId
+    setMovies((prevMovies: MovieItem[]) =>
+      prevMovies.map(movie => movie.id === movieId
           ? { ...movie, isSelected: !movie.isSelected }
           : movie
       )
-    );
+    )
   };
 
   const togglePrivate = (value: boolean): void => {
@@ -102,7 +72,7 @@ const CollectionPage: React.FC = () => {
       >
         <View style={styles.moviePoster}>
           <Image 
-            source={{ uri: item.image }} 
+            source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} 
             style={styles.movieImage}
             resizeMode="cover"
           />
@@ -120,11 +90,14 @@ const CollectionPage: React.FC = () => {
   );
 
   const renderRow = ({ item, index }: { item: MovieItem[]; index: number }) => (
-    <View style={styles.movieRow}>
-      {item.map((movie) => renderMovieItem({ item: movie }))}
+    <View style={styles.movieRow} key={index}>
+      {item.map((movie, movieIndex) => (
+        <View key={`${movie.id}-${movieIndex}`}>
+          {renderMovieItem({ item: movie })}
+        </View>
+      ))}
     </View>
   );
-
 
   const groupedMovies = movies.reduce<MovieItem[][]>((rows, movie, index) => {
     if (index % 3 === 0) {
@@ -152,7 +125,7 @@ const CollectionPage: React.FC = () => {
           <Switch
             value={isPrivate}
             onValueChange={togglePrivate}
-            trackColor={{ false: '#E0E0E0', true: '#4CAF50' }}
+            trackColor={{ false: '#000000', true: '#F5C842' }}
             thumbColor={isPrivate ? '#FFF' : '#FFF'}
             ios_backgroundColor="#E0E0E0"
           />
@@ -182,7 +155,6 @@ const CollectionPage: React.FC = () => {
           />
         </View>
 
-
         <View style={styles.addFromHereContainer}>
           <View style={styles.addFromHereHeader}>
             <Text style={styles.addFromHereTitle}>Add from here</Text>
@@ -190,8 +162,6 @@ const CollectionPage: React.FC = () => {
               <Text style={styles.seeMore}>See More</Text>
             </TouchableOpacity>
           </View>
-
-
           <FlatList
             data={groupedMovies}
             renderItem={renderRow}

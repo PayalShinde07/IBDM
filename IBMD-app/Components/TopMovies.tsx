@@ -1,12 +1,14 @@
 import React, { JSX, useEffect } from "react";
 import { FlatList, View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useRouter } from "expo-router";
 
-export default function Upcoming(): JSX.Element {
+export default function TopMovies(): JSX.Element {
 
+  // const router = useRouter();
   const [movies, setMovies] = React.useState([]);
   const [, setLoading] = React.useState(true);
   useEffect(() => {
-    fetch("https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1", {
+    fetch("https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1", {
       headers: {
         accept: "application/json",
         Authorization:
@@ -35,12 +37,13 @@ export default function Upcoming(): JSX.Element {
                   keyExtractor={(item, index) => index.toString()}
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  renderItem={({ item }: { item: { poster_path: string; title: string } }) => (
+                  renderItem={({ item }: { item: { poster_path: string; title: string; id:number } }) => (
                    <View style={styles.movieCard}>
-                     <TouchableOpacity>
+                    <TouchableOpacity >
                     <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster_path}` }} style={styles.movieImage} />
                     <Text numberOfLines={1} style={styles.movieTitle}>{item.title}</Text>
-                    </TouchableOpacity>
+                     </TouchableOpacity>
+                   
                    </View>
                   )}
                 />

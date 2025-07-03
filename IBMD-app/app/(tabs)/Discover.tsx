@@ -1,8 +1,9 @@
 import { useRouter } from 'expo-router';
 import React, { JSX, useState } from 'react';
-import {View,Text,SafeAreaView,StatusBar,StyleSheet, ScrollView,TouchableOpacity,FlatList} from 'react-native';
-import MovieCard from '@/Components/MovieCard';
-import {topMovies,upcomingMovies,recommendedMovies} from '@/utils/MovieArray';
+import {View,Text,SafeAreaView,StatusBar,StyleSheet, ScrollView,TouchableOpacity,} from 'react-native';
+import TopMovies from '@/Components/TopMovies';
+import TVShows from '@/Components/TVShows';
+import PopularMovies from '@/Components/PopularMovies';
 
 
 export default function Discover(): JSX.Element {
@@ -43,17 +44,7 @@ export default function Discover(): JSX.Element {
                 <Text style={styles.seeMoreLink}>See More</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.moviesScroll}>
-              <FlatList
-                data={topMovies}
-                keyExtractor={(item, index) => index.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <MovieCard title={item.title} image={item.image} />
-                )}
-              />
-            </View>
+            <TopMovies />
           </View>
 
           <View style={styles.section}>
@@ -63,17 +54,7 @@ export default function Discover(): JSX.Element {
                 <Text style={styles.seeMoreLink}>See More</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.moviesScroll}>
-              <FlatList
-                data={upcomingMovies}
-                keyExtractor={(item, index) => index.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <MovieCard title={item.title} image={item.image} />
-                )}
-              />
-            </View>
+            <PopularMovies/>
           </View>
 
           <View style={styles.section}>
@@ -83,17 +64,7 @@ export default function Discover(): JSX.Element {
                 <Text style={styles.seeMoreLink}>See More</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.moviesScroll}>
-              <FlatList
-                data={recommendedMovies}
-                keyExtractor={(item, index) => index.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <MovieCard title={item.title} image={item.image} />
-                )}
-              />
-            </View>
+            <TVShows />
           </View>
         </ScrollView>
       </SafeAreaView>
