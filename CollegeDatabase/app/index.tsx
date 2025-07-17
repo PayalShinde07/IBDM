@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AuthNavigator from './src/navigation/AuthNavigator';
-import MainNavigator from './src/navigation/MainNavigator';
+import AuthNavigator from '@/src/navigation/AuthNavigator';
+import MainNavigator from '@/src/navigation/MainNavigator';
 
 interface User {
   _id: string;

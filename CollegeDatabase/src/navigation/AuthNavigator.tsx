@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import SignIn from '../components/auth/SignIn';
-import SignUp from '../components/auth/SignUp';
+import SignIn from '@/components/auth/SignIn';
+import SignUp from '@/components/auth/SignUp';
 
 interface User {
   _id: string;

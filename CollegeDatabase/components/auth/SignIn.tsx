@@ -134,7 +134,7 @@ export default function SignIn({ onLogin, onSwitchToSignUp }: SignInProps) {
           </TouchableOpacity>
 
           <View style={styles.switchContainer}>
-            <Text style={styles.switchText}>Don't have an account? </Text>
+            <Text style={styles.switchText}>Dont have an account? </Text>
             <TouchableOpacity onPress={onSwitchToSignUp}>
               <Text style={styles.switchLink}>Sign Up</Text>
             </TouchableOpacity>

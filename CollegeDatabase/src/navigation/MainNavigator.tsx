@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import StudentList from '../components/student/StudentList';
-import StudentForm from '../components/student/StudentForm';
-import UserProfile from '../components/user/UserProfile';
-import Navigation from '../components/common/Navigation';
+import StudentList from '@/components/student/StudentList';
+import StudentForm from '@/components/student/StudentForm';
+import UserProfile from '@/components/user/UserProfile';
+import Navigation from '@/components/common/Navigation';
 
 interface User {
   _id: string;
