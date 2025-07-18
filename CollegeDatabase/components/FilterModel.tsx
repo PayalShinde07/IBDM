@@ -1,29 +1,20 @@
-// components/FilterModal.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   Modal,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   Switch,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { COLORS, FONTS, SPACING, COURSES, GRADES } from '../constants';
 
 interface FilterModalProps {
   visible: boolean;
   onClose: () => void;
-  filters: {
-    course?: string;
-    grade?: string;
-    isActive?: boolean;
-  };
-  onApplyFilters: (filters: {
-    course?: string;
-    grade?: string;
-    isActive?: boolean;
-  }) => void;
+  filters: any;
+  onApplyFilters: (filters: any) => void;
   onResetFilters: () => void;
 }
 
@@ -34,24 +25,31 @@ const FilterModal: React.FC<FilterModalProps> = ({
   onApplyFilters,
   onResetFilters,
 }) => {
-  const [selectedCourse, setSelectedCourse] = useState(filters.course || '');
-  const [selectedGrade, setSelectedGrade] = useState(filters.grade || '');
-  const [isActiveFilter, setIsActiveFilter] = useState(filters.isActive);
+  const [localFilters, setLocalFilters] = useState<{
+    course: string;
+    grade: string;
+    isActive: boolean | null;
+  }>({
+    course: '',
+    grade: '',
+    isActive: null,
+  });
+
+  useEffect(() => {
+    setLocalFilters(filters);
+  }, [filters]);
 
   const handleApply = () => {
-    const newFilters: any = {};
-    if (selectedCourse) newFilters.course = selectedCourse;
-    if (selectedGrade) newFilters.grade = selectedGrade;
-    if (isActiveFilter !== undefined) newFilters.isActive = isActiveFilter;
-    
-    onApplyFilters(newFilters);
+    onApplyFilters(localFilters);
     onClose();
   };
 
   const handleReset = () => {
-    setSelectedCourse('');
-    setSelectedGrade('');
-    setIsActiveFilter(undefined);
+    setLocalFilters({
+      course: '',
+      grade: '',
+      isActive: null,
+    });
     onResetFilters();
     onClose();
   };
@@ -67,123 +65,88 @@ const FilterModal: React.FC<FilterModalProps> = ({
             </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.content}>
-            {/* Course Filter */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Course</Text>
-              <View style={styles.optionsContainer}>
-                <TouchableOpacity
-                  style={[
-                    styles.option,
-                    selectedCourse === '' && styles.selectedOption,
-                  ]}
-                  onPress={() => setSelectedCourse('')}
+          <View style={styles.content}>
+            <View style={styles.filterGroup}>
+              <Text style={styles.label}>Course</Text>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={localFilters.course}
+                  onValueChange={(value) => setLocalFilters({ ...localFilters, course: value })}
+                  style={styles.picker}
                 >
-                  <Text
-                    style={[
-                      styles.optionText,
-                      selectedCourse === '' && styles.selectedOptionText,
-                    ]}
-                  >
-                    All Courses
-                  </Text>
-                </TouchableOpacity>
-                {COURSES.map((course) => (
-                  <TouchableOpacity
-                    key={course}
-                    style={[
-                      styles.option,
-                      selectedCourse === course && styles.selectedOption,
-                    ]}
-                    onPress={() => setSelectedCourse(course)}
-                  >
-                    <Text
-                      style={[
-                        styles.optionText,
-                        selectedCourse === course && styles.selectedOptionText,
-                      ]}
-                    >
-                      {course}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                  <Picker.Item label="All Courses" value="" />
+                  {COURSES.map((course) => (
+                    <Picker.Item key={course} label={course} value={course} />
+                  ))}
+                </Picker>
               </View>
             </View>
 
-            {/* Grade Filter */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Grade</Text>
-              <View style={styles.optionsContainer}>
-                <TouchableOpacity
-                  style={[
-                    styles.option,
-                    selectedGrade === '' && styles.selectedOption,
-                  ]}
-                  onPress={() => setSelectedGrade('')}
+            <View style={styles.filterGroup}>
+              <Text style={styles.label}>Grade</Text>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={localFilters.grade}
+                  onValueChange={(value) => setLocalFilters({ ...localFilters, grade: value })}
+                  style={styles.picker}
                 >
-                  <Text
-                    style={[
-                      styles.optionText,
-                      selectedGrade === '' && styles.selectedOptionText,
-                    ]}
-                  >
-                    All Grades
-                  </Text>
-                </TouchableOpacity>
-                {GRADES.map((grade) => (
-                  <TouchableOpacity
-                    key={grade}
-                    style={[
-                      styles.option,
-                      selectedGrade === grade && styles.selectedOption,
-                    ]}
-                    onPress={() => setSelectedGrade(grade)}
-                  >
-                    <Text
-                      style={[
-                        styles.optionText,
-                        selectedGrade === grade && styles.selectedOptionText,
-                      ]}
-                    >
-                      {grade}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                  <Picker.Item label="All Grades" value="" />
+                  {GRADES.map((grade) => (
+                    <Picker.Item key={grade} label={grade} value={grade} />
+                  ))}
+                </Picker>
               </View>
             </View>
 
-            {/* Status Filter */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Status</Text>
+            <View style={styles.switchRow}>
+              <Text style={styles.label}>Status</Text>
               <View style={styles.switchContainer}>
-                <View style={styles.switchRow}>
-                  <Text style={styles.switchLabel}>Active Only</Text>
-                  <Switch
-                    value={isActiveFilter === true}
-                    onValueChange={(value) => setIsActiveFilter(value ? true : undefined)}
-                    trackColor={{ false: COLORS.gray[300], true: COLORS.primary }}
-                    thumbColor={COLORS.white}
-                  />
-                </View>
-                <View style={styles.switchRow}>
-                  <Text style={styles.switchLabel}>Inactive Only</Text>
-                  <Switch
-                    value={isActiveFilter === false}
-                    onValueChange={(value) => setIsActiveFilter(value ? false : undefined)}
-                    trackColor={{ false: COLORS.gray[300], true: COLORS.error }}
-                    thumbColor={COLORS.white}
-                  />
-                </View>
+                <TouchableOpacity
+                  style={[
+                    styles.statusOption,
+                    localFilters.isActive === null && styles.statusOptionActive,
+                  ]}
+                  onPress={() => setLocalFilters({ ...localFilters, isActive: null })}
+                >
+                  <Text style={[
+                    styles.statusOptionText,
+                    localFilters.isActive === null && styles.statusOptionTextActive,
+                  ]}>All</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.statusOption,
+                    localFilters.isActive === true && styles.statusOptionActive,
+                  ]}
+                  onPress={() => setLocalFilters({ ...localFilters, isActive: true })}
+                >
+                  <Text style={[
+                    styles.statusOptionText,
+                    localFilters.isActive === true && styles.statusOptionTextActive,
+                  ]}>Active</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.statusOption,
+                    localFilters.isActive === false && styles.statusOptionActive,
+                  ]}
+                  onPress={() => setLocalFilters({ ...localFilters, isActive: false })}
+                >
+                  <Text style={[
+                    styles.statusOptionText,
+                    localFilters.isActive === false && styles.statusOptionTextActive,
+                  ]}>Inactive</Text>
+                </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
+          </View>
 
           <View style={styles.footer}>
             <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
               <Text style={styles.resetButtonText}>Reset</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-              <Text style={styles.applyButtonText}>Apply Filters</Text>
+              <Text style={styles.applyButtonText}>Apply</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -196,13 +159,14 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modal: {
     backgroundColor: COLORS.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '80%',
+    borderRadius: 12,
+    width: '90%',
+    maxHeight: '70%',
   },
   header: {
     flexDirection: 'row',
@@ -210,79 +174,74 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.gray[200],
+    borderBottomColor: COLORS.border,
   },
   title: {
     fontSize: FONTS.sizes.lg,
-    fontWeight: FONTS.bold,
+    fontWeight: 'bold',
     color: COLORS.text.primary,
   },
   closeButton: {
     fontSize: 24,
-    color: COLORS.gray[500],
-    fontWeight: '300',
+    color: COLORS.text.secondary,
   },
   content: {
-    flex: 1,
     padding: SPACING.lg,
   },
-  section: {
-    marginBottom: SPACING.xl,
+  filterGroup: {
+    marginBottom: SPACING.lg,
   },
-  sectionTitle: {
+  label: {
     fontSize: FONTS.sizes.md,
     fontWeight: '500',
     color: COLORS.text.primary,
-    marginBottom: SPACING.md,
+    marginBottom: SPACING.xs,
   },
-  optionsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    // gap: SPACING.sm, // React Native does not support 'gap'
-  },
-  option: {
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: 20,
-    backgroundColor: COLORS.gray[100],
+  pickerContainer: {
     borderWidth: 1,
-    borderColor: COLORS.gray[200],
+    borderColor: COLORS.border,
+    borderRadius: 8,
+    backgroundColor: COLORS.white,
   },
-  selectedOption: {
+  picker: {
+    height: 44,
+  },
+  switchRow: {
+    marginBottom: SPACING.lg,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    marginTop: SPACING.xs,
+  },
+  statusOption: {
+    flex: 1,
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    alignItems: 'center',
+    marginRight: SPACING.xs,
+  },
+  statusOptionActive: {
     backgroundColor: COLORS.primary,
     borderColor: COLORS.primary,
   },
-  optionText: {
+  statusOptionText: {
     fontSize: FONTS.sizes.sm,
-    color: COLORS.text.secondary,
-    fontWeight: '500',
-  },
-  selectedOptionText: {
-    color: COLORS.white,
-  },
-  switchContainer: {
-    // gap: SPACING.md, // React Native does not support 'gap'
-  },
-  switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: SPACING.sm,
-  },
-  switchLabel: {
-    fontSize: FONTS.sizes.md,
     color: COLORS.text.primary,
-    fontWeight: '500',
+  },
+  statusOptionTextActive: {
+    color: COLORS.white,
   },
   footer: {
     flexDirection: 'row',
     padding: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: COLORS.gray[200],
-    gap: SPACING.md,
+    borderTopColor: COLORS.border,
   },
   resetButton: {
     flex: 1,
+    marginRight: SPACING.sm,
     paddingVertical: SPACING.md,
     borderRadius: 8,
     backgroundColor: COLORS.gray[100],
@@ -295,6 +254,7 @@ const styles = StyleSheet.create({
   },
   applyButton: {
     flex: 1,
+    marginLeft: SPACING.sm,
     paddingVertical: SPACING.md,
     borderRadius: 8,
     backgroundColor: COLORS.primary,
@@ -303,7 +263,7 @@ const styles = StyleSheet.create({
   applyButtonText: {
     fontSize: FONTS.sizes.md,
     color: COLORS.white,
-    fontWeight: FONTS.weights.medium,
+    fontWeight: '500',
   },
 });
 
