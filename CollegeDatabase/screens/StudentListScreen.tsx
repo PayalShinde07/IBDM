@@ -16,9 +16,9 @@ import { COLORS, FONTS, SPACING } from '../constants';
 import { getFullName, getGradeColor, getStatusColor, getStatusText } from '../utils';
 import SearchBar from '../components/SearchBar';
 import StudentCard from '../components/StudentCard';
-import FilterModal from '../components/FilterModal';
-import AddStudentModal from '../components/AddStudentModal';
-import EditStudentModal from '../components/EditStudentModal';
+import FilterModal from '../components/FilterModel';
+import AddStudentModal from '../components/AddStudentModel';
+import EditStudentModal from '../components/EditStudentModel';
 import StudentDetailModal from '../components/StudentDetailModal';
 
 const StudentListScreen: React.FC = () => {
@@ -187,7 +187,6 @@ const StudentListScreen: React.FC = () => {
       <AddStudentModal
         visible={showAddModal}
         onClose={() => setShowAddModal(false)}
-        onSubmit={actions.createStudent}
       />
 
       {selectedStudent && (
@@ -196,15 +195,15 @@ const StudentListScreen: React.FC = () => {
             visible={showEditModal}
             onClose={() => {
               setShowEditModal(false);
-              setSelectedStudent(null);
-            }}
-            student={selectedStudent}
-            onSubmit={(updatedStudent) => {
-              actions.updateStudent(selectedStudent._id!, updatedStudent);
-              setShowEditModal(false);
-              setSelectedStudent(null);
-            }}
-          />
+                setSelectedStudent(null);
+              }}
+              student={selectedStudent}
+              onSubmit={(updatedStudent: Student) => {
+                actions.updateStudent(selectedStudent._id!, updatedStudent);
+                setShowEditModal(false);
+                setSelectedStudent(null);
+              }}
+              />
 
           <StudentDetailModal
             visible={showDetailModal}
@@ -213,10 +212,6 @@ const StudentListScreen: React.FC = () => {
               setSelectedStudent(null);
             }}
             student={selectedStudent}
-            onEdit={() => {
-              setShowDetailModal(false);
-              setShowEditModal(true);
-            }}
             onDelete={() => {
               handleDeleteStudent(selectedStudent);
               setShowDetailModal(false);

@@ -205,7 +205,7 @@ export const getValidationErrors = (student: Partial<Student>): string[] => {
   if (!student.subjects || student.subjects.length === 0) errors.push('At least one subject is required');
   
   if (student.cgpa === undefined) errors.push('CGPA is required');
-  else if (!validateCGPA(student.cgpa)) errors.push('Invalid CGPA');
+  else if (!validateCGPA(Number(student.cgpa))) errors.push('Invalid CGPA');
   
   return errors;
 };
